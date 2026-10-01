@@ -31,11 +31,11 @@ class User extends Authenticatable
         ];
     }
 
-    protected function properties(): HasMany{
+    public function properties(): HasMany{
         return $this->hasMany(Property::class);
     }
 
-    protected function bookings():HasMany{
+    public function bookings():HasMany{
         return $this->hasMany(Booking::class);
     }
 }

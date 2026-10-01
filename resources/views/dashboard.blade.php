@@ -132,7 +132,7 @@
     
                                     @auth
                                     <button type="button"
-                                            @click="$dispatch('open-modal', 'book-property-{{ $property->id }}')"
+                                            data-modal-open="book-property-{{ $property->id }}"
                                             class="mt-4 inline-flex w-full items-center justify-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                         {{ __('Book now') }}
                                     </button>
@@ -142,7 +142,7 @@
                         </article>
 
                         <x-modal name="book-property-{{ $property->id }}" maxWidth="lg">
-                            <form method="POST" class="p-6">
+                            <form method="POST" action="{{ route('booking') }}" class="p-6">
                                 @csrf
 
                                 <div class="flex items-start justify-between gap-4">
@@ -176,42 +176,33 @@
 
                                     <div>
                                         <x-input-label for="people_count_{{ $property->id }}" :value="__('Number of people')" />
-                                        <select id="people_count_{{ $property->id }}"
-                                                name="people_count"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                            @for ($people = 1; $people <= $property->max_people_allowed; $people++)
-                                                <option value="{{ $people }}" @selected((int) old('people_count', 1) === $people)>
-                                                    {{ $people }}
-                                                </option>
-                                            @endfor
-                                        </select>
+                                        <x-text-input id="people_count_{{ $property->id }}"
+                                                       name="people_count"
+                                                       type="number"
+                                                       inputmode="numeric"
+                                                       step="1"
+                                                       min="1"
+                                                       max="{{ $property->max_people_allowed }}"
+                                                       class="mt-1 block w-full"
+                                                       value="{{ old('people_count', 1) }}" />
                                     </div>
+
+                                    <input type="hidden" name="property_id" value="{{ $property->id }}" />
                                 </div>
 
-                                <dl class="mt-6 divide-y divide-gray-100 rounded-lg bg-gray-50 px-4">
-                                    <div class="flex items-center justify-between py-3 text-sm">
-                                        <dt class="text-gray-500">{{ __('Price per night') }}</dt>
-                                        <dd class="font-medium text-gray-900">₹{{ number_format($property->price) }}</dd>
-                                    </div>
-                                    <div class="flex items-center justify-between py-3 text-sm">
-                                        <dt class="text-gray-500">{{ __('Maximum guests') }}</dt>
-                                        <dd class="font-medium text-gray-900">{{ $property->max_people_allowed }}</dd>
-                                    </div>
-                                    <div class="flex items-center justify-between py-3 text-sm">
-                                        <dt class="font-semibold text-gray-900">{{ __('Total') }}</dt>
-                                        <dd class="text-base font-semibold text-gray-900" id="booking-total-{{ $property->id }}">
-                                            ₹{{ number_format($property->price) }}
-                                        </dd>
-                                    </div>
-                                </dl>
-
                                 <div class="mt-6 flex items-center justify-end gap-3">
-                                    <x-secondary-button @click="$dispatch('close-modal', 'book-property-{{ $property->id }}')">
+                                    <div class="message">
+                                    @if ($modal_message!==null)
+                                        {{ __($modal_message) }}
+                                    @endif
+                                    </div>
+                                    
+                                    <x-secondary-button data-modal-close>
                                         {{ __('Cancel') }}
                                     </x-secondary-button>
-
-                                    <x-primary-button>
-                                        {{ __('Confirm booking') }}
+                                    
+                                    <x-primary-button data-modal-submit>
+                                        {{ __('Submit') }}
                                     </x-primary-button>
                                 </div>
                             </form>
@@ -222,4 +213,19 @@
 
         </div>
     </div>
+    @if ($modal_open && $modal_property_id)
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modalName = 'book-property-{{ $modal_property_id }}';
+
+            const button = document.querySelector(
+                `[data-modal-open="${modalName}"]`
+            );
+
+            if (button) {
+                button.click();
+            }
+        });
+    </script>
+@endif
 </x-app-layout>

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Property extends Model
 {
@@ -15,7 +15,7 @@ class Property extends Model
         'max_people_allowed'
     ];
 
-    protected function bookings():HasMany{
+    public function bookings():HasMany{
         return $this->hasMany(Booking::class);
     }
 }

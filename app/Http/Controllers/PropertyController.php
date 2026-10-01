@@ -14,8 +14,11 @@ class PropertyController extends Controller
     {
         $properties = Property::all();
 
-        return view('dashboard',[
-            'properties'=>$properties
+        return view('dashboard', [
+            'properties' => $properties,
+            'modal_open' => session('modal_open', false),
+            'modal_message' => session('modal_message'),
+            'modal_property_id' => session('modal_property_id'),
         ]);
     }
 
@@ -32,6 +35,7 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
+
         $property = Property::create([
             'title'=>$request->title,
             'description'=>$request->description,
