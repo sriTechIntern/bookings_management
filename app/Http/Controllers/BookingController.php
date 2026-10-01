@@ -14,8 +14,12 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $bookings = Booking::all();
-        return $bookings;
+        $bookings = Booking::join('properties','bookings.property_id','=','properties.id')
+            ->select('bookings.booking_date','bookings.people_count','properties.title','properties.location')
+            ->get();
+        return view('bookings',[
+            'bookings'=>$bookings
+        ]);
     }
 
     /**

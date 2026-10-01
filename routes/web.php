@@ -12,15 +12,23 @@ use App\Http\Controllers\PropertyController;
 //     ->name('dashboard');
 
 Route::get('/',[PropertyController::Class, 'index'])
-    // ->middleware(['auth','verified'])
-    ->name('dashboard');
+// ->middleware(['auth','verified'])
+->name('dashboard');
+
+Route::get('/filter',[PropertyController::Class,'filterProperties'])
+->name('properties.filter');
 
 Route::post('/booking',[BookingController::Class, 'store'])
-    ->name('booking');
+->name('booking');
 
+Route::get('/bookings',[BookingController::Class,'index'])
+->name('bookings');
+
+Route::get('/properties',[PropertyController::Class,'userProperties'])
+->name('properties');
 
 Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
+->middleware(['auth'])
+->name('profile');
 
 require __DIR__.'/auth.php';

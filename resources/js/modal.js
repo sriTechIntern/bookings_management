@@ -17,8 +17,11 @@ const upgrade = (dialog) => {
     dialog.showModal();
 };
 
+console.log("js file is loaded");
+
 document.addEventListener('click', (event) => {
     const target = event.target;
+    console.log("modal is clicked")
 
     const opener = target.closest('[data-modal-open]');
 

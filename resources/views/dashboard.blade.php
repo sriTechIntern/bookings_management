@@ -11,23 +11,10 @@
     <div class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <form method="GET" class="bg-white shadow-sm sm:rounded-lg p-4 sm:p-5">
+            <form method="GET" action="{{ route('properties.filter') }}" class="bg-white shadow-sm sm:rounded-lg p-4 sm:p-5">
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:items-end">
 
-                    <div class="lg:col-span-4">
-                        <x-input-label for="q" :value="__('Search')" />
-
-                        <div class="relative mt-1">
-                            <span class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3 text-gray-400">
-                                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607Z" />
-                                </svg>
-                            </span>
-                            <x-text-input id="q" name="q" type="search" value="{{ request('q') }}"
-                                           class="block w-full ps-10"
-                                           placeholder="{{ __('Title or location') }}" />
-                        </div>
-                    </div>
+                   
 
                     <div class="lg:col-span-3">
                         <x-input-label for="location" :value="__('Location')" />
@@ -43,13 +30,7 @@
                         </select>
                     </div>
 
-                    <div class="lg:col-span-2">
-                        <x-input-label for="check_in" :value="__('Check in')" />
-
-                        <x-text-input id="check_in" name="check_in" type="date" class="block mt-1 w-full"
-                                       value="{{ request('check_in') }}"
-                                       min="{{ date('Y-m-d') }}" />
-                    </div>
+            
 
                     <div class="lg:col-span-1">
                         <x-input-label for="guests" :value="__('Guests')" />
@@ -71,7 +52,7 @@
                         </x-primary-button>
 
                         @if (request()->hasAny(['q', 'location', 'check_in', 'guests']))
-                            <a href="{{ url()->current() }}"
+                            <a href="{{ route('dashboard') }}"
                                class="text-sm text-gray-500 underline hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rounded-md">
                                 {{ __('Clear') }}
                             </a>

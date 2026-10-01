@@ -2,12 +2,15 @@
 
 use App\Livewire\Actions\Logout;
 use Livewire\Volt\Component;
+use Illuminate\Support\Facades\Auth;
+
 
 new class extends Component
 {
     /**
      * Log the current user out of the application.
-     */
+    */
+    // $user = Auth::user();
     public function logout(Logout $logout): void
     {
         $logout();
@@ -34,6 +37,12 @@ new class extends Component
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @if (Auth::user()->role==='owner' || Auth::user()->role==='admin')
+                        <x-nav-link :href="route('properties')" :active="request()->routeIs('properties')" wire:navigate>
+                        {{ __('Your Properties') }}
+                    </x-nav-link>
+                    @endif
                     @endauth
                 </div>
             </div>
@@ -57,6 +66,10 @@ new class extends Component
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile')" wire:navigate>
                             {{ __('Profile') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('bookings')" wire:navigate>
+                            {{ __('Bookings') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
